@@ -46,7 +46,7 @@ class UserController extends Controller
 
         $user = User::create($validated);
 
-        return redirect()->route('liste-peronnels')->with('success', 'Utilisateur créé avec succès');
+        return redirect()->route('liste-personnels')->with('success', 'Utilisateur créé avec succès');
     }
 
     /**

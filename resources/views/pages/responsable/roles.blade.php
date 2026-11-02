@@ -205,7 +205,7 @@
             document.getElementById('editId').value = id;
             document.getElementById('editName').value = name || '';
             document.getElementById('editDescription').value = description || '';
-            document.getElementById('editForm').action = '/dashboard/roles/' + id;
+            document.getElementById('editForm').action = '/roles/' + id;
             openModal('editModal');
         }
 

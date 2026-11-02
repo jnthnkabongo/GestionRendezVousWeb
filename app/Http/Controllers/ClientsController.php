@@ -12,7 +12,7 @@ class ClientsController extends Controller
      */
     public function index()
     {
-        $liste_clients = Client::with('rendezVous')->paginate(10);
+        $liste_clients = Client::orderBy('id', 'desc')->with('rendezVous')->paginate(10);
         return view('pages.responsable.invites', compact('liste_clients'));
     }
 
@@ -75,7 +75,7 @@ class ClientsController extends Controller
 
         $client->update($validated);
 
-        return redirect()->route('liste-clients')->with('success', 'Client modifié avec succès');
+        return redirect()->route('liste-invites')->with('success', 'Client modifié avec succès');
     }
 
     /**

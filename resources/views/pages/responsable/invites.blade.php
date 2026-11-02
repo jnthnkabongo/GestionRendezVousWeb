@@ -47,10 +47,10 @@
                                 <td class="px-6 py-4 text-blue-600">{{ $client->email ?? 'N/A' }}</td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center justify-center gap-2">
-                                        <button onclick="openViewModal({{ $client->id }}, '{{ $client->nom ?? '' }}', '{{ $client->prenom ?? '' }}', '{{ $client->telephone ?? '' }}', '{{ $client->email ?? '' }}', '{{ $client->adresse ?? '' }}')" class="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors duration-150" title="Voir détails">
+                                        <button onclick="openViewModal({{ $client->id }}, '{{ $client->nom ?? '' }}', '{{ $client->prenom ?? '' }}', '{{ $client->telephone ?? '' }}', '{{ $client->email ?? '' }}')" class="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors duration-150" title="Voir détails">
                                             <i class="fas fa-eye"></i>
                                         </button>
-                                        <button onclick="openEditModal({{ $client->id }}, '{{ $client->nom ?? '' }}', '{{ $client->prenom ?? '' }}', '{{ $client->telephone ?? '' }}', '{{ $client->email ?? '' }}', '{{ $client->adresse ?? '' }}')" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-150" title="Modifier">
+                                        <button onclick="openEditModal({{ $client->id }}, '{{ $client->nom ?? '' }}', '{{ $client->prenom ?? '' }}', '{{ $client->telephone ?? '' }}', '{{ $client->email ?? '' }}')" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-150" title="Modifier">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                         <button onclick="deleteInvite({{ $client->id }}, '{{ $client->nom . ' ' . $client->prenom ?? 'cet invité' }}')" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-150" title="Supprimer">
@@ -190,22 +190,22 @@
             </div>
             <div class="p-6 space-y-4">
                 <div class="flex items-center gap-4">
-                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-2xl">
-                        {{ substr($client->nom ?? 'C', 0, 1) }}
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-2xl" id="viewAvatar">
+                        C
                     </div>
                     <div>
-                        <h4 class="text-lg font-bold text-gray-800">{{ $client->nom ?? '' }} {{ $client->prenom ?? '' }}</h4>
-                    <p class="text-gray-500 text-sm">Invité</p>
+                        <h4 class="text-lg font-bold text-gray-800" id="viewName">Nom</h4>
+                        <p class="text-gray-500 text-sm">Invité</p>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-4 pt-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-500 mb-1">Téléphone</label>
-                        <p class="text-gray-800 font-medium">{{ $client->telephone ?? 'N/A' }}</p>
+                        <p class="text-gray-800 font-medium" id="viewTelephone">N/A</p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-500 mb-1">Email</label>
-                        <p class="text-gray-800 font-medium">{{ $client->email ?? 'N/A' }}</p>
+                        <p class="text-gray-800 font-medium" id="viewEmail">N/A</p>
                     </div>
                 </div>
                 <div class="flex gap-3 pt-4">
@@ -226,17 +226,20 @@
             document.getElementById(modalId).classList.add('hidden');
         }
 
-        function openViewModal(id, nom, prenom, telephone, email, adresse) {
-            document.getElementById('viewModal').classList.remove('hidden');
+        function openViewModal(id, nom, prenom, telephone, email) {
+            document.getElementById('viewAvatar').textContent = nom ? nom.charAt(0).toUpperCase() : 'C';
+            document.getElementById('viewName').textContent = (nom || '') + ' ' + (prenom || '');
+            document.getElementById('viewTelephone').textContent = telephone || 'N/A';
+            document.getElementById('viewEmail').textContent = email || 'N/A';
+            openModal('viewModal');
         }
 
-        function openEditModal(id, nom, prenom, telephone, email, adresse) {
+        function openEditModal(id, nom, prenom, telephone, email) {
             document.getElementById('editId').value = id;
             document.getElementById('editNom').value = nom;
             document.getElementById('editPrenom').value = prenom;
             document.getElementById('editTelephone').value = telephone;
             document.getElementById('editEmail').value = email;
-            document.getElementById('editAdresse').value = adresse;
             document.getElementById('editForm').action = '/invites/' + id;
             openModal('editModal');
         }

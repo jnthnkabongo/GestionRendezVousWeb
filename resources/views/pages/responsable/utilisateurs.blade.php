@@ -69,10 +69,10 @@
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex items-center justify-center gap-2">
-                                    <button onclick="openViewModal({{ $user->id }}, '{{ $user->name ?? '' }}', '{{ $user->email ?? '' }}', '{{ $user->telephone ?? '' }}', '{{ $user->role->name ?? '' }}', {{ $user->actif ? 'true' : 'false' }})" class="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors duration-150" title="Voir détails">
+                                    <button onclick="openViewModal({{ $user->id }}, '{{ $user->name ?? '' }}', '{{ $user->email ?? '' }}', '{{ $user->role ? $user->role->name : '' }}', {{ $user->actif ? 'true' : 'false' }})" class="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors duration-150" title="Voir détails">
                                         <i class="fas fa-eye"></i>
                                     </button>
-                                    <button onclick="openEditModal({{ $user->id }}, '{{ $user->name ?? '' }}', '{{ $user->email ?? '' }}', '{{ $user->telephone ?? '' }}', {{ $user->role_id ?? 'null' }}, {{ $user->actif ? 'true' : 'false' }})" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-150" title="Modifier">
+                                    <button onclick="openEditModal({{ $user->id }}, '{{ $user->name ?? '' }}', '{{ $user->email ?? '' }}', {{ $user->role_id ?? 'null' }}, {{ $user->actif ? 'true' : 'false' }})" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-150" title="Modifier">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                     <button onclick="deleteUser({{ $user->id }}, '{{ $user->name ?? 'cet utilisateur' }}')" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-150" title="Supprimer">
@@ -282,7 +282,7 @@
             document.getElementById('editEmail').value = email;
             document.getElementById('editRoleId').value = roleId || '';
             document.getElementById('editActif').checked = actif;
-            document.getElementById('editForm').action = '/personnels/' + id;
+            document.getElementById('editForm').action = '/dashboard/personnels/' + id;
             openModal('editModal');
         }
 
