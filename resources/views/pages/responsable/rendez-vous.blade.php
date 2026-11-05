@@ -233,7 +233,7 @@
                     <button type="button" onclick="closeModal('createModal')" class="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-200 font-medium">
                         Annuler
                     </button>
-                    <button type="submit" class="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 font-medium shadow-md hover:shadow-lg">
+                    <button type="submit" id="createSubmitBtn" class="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 font-medium shadow-md hover:shadow-lg">
                         Créer
                     </button>
                 </div>
@@ -321,7 +321,7 @@
                     <button type="button" onclick="closeModal('editModal')" class="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-200 font-medium">
                         Annuler
                     </button>
-                    <button type="submit" class="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 font-medium shadow-md hover:shadow-lg">
+                    <button type="submit" id="editSubmitBtn" class="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 font-medium shadow-md hover:shadow-lg">
                         Modifier
                     </button>
                 </div>
@@ -383,6 +383,34 @@
         function closeModal(modalId) {
             document.getElementById(modalId).classList.add('hidden');
         }
+
+        // Disable submit buttons on form submission
+        document.addEventListener('DOMContentLoaded', function() {
+            const createForm = document.querySelector('#createModal form');
+            const editForm = document.querySelector('#editModal form');
+
+            if (createForm) {
+                createForm.addEventListener('submit', function() {
+                    const submitBtn = document.getElementById('createSubmitBtn');
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                        submitBtn.textContent = 'Création en cours...';
+                    }
+                });
+            }
+
+            if (editForm) {
+                editForm.addEventListener('submit', function() {
+                    const submitBtn = document.getElementById('editSubmitBtn');
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                        submitBtn.textContent = 'Modification en cours...';
+                    }
+                });
+            }
+        });
 
         function openEditModal(id, titre, date, heureDebut, heureFin, statut, chefId, rappelActive, rappelMinutes) {
             document.getElementById('editId').value = id;

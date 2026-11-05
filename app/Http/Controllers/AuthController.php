@@ -107,8 +107,8 @@ class AuthController extends Controller
         }
 
         if (Auth::attempt($credentials)) {
-            // Récupérer l'utilisateur connecté
-            $user = Auth::user();
+            // Récupérer l'utilisateur connecté avec son rôle
+            $user = Auth::user()->load('role');
             $token = $user->createToken('auth-token')->plainTextToken;
             
             //$request->session()->regenerate();

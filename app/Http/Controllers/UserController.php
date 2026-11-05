@@ -100,4 +100,103 @@ class UserController extends Controller
 
         return redirect()->route('liste-personnels')->with('success', 'Utilisateur supprimé avec succès');
     }
+
+    /**
+     * API: Get all users with their role
+     */
+    public function apiIndex()
+    {
+        $users = User::with('role')->orderBy('created_at', 'desc')->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $users,
+        ]);
+    }
+
+    /**
+     * API: Get all roles
+     */
+    public function apiRoles()
+    {
+        $roles = Role::orderBy('name')->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $roles,
+        ]);
+    }
+
+    /**
+     * API: Create a new user
+     */
+    public function apiStore(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email|max:255',
+            'password' => 'required|string|min:6',
+            'role_id' => 'nullable|exists:roles,id',
+            'actif' => 'nullable|boolean',
+        ]);
+
+        $validated['password'] = Hash::make($validated['password']);
+        $validated['actif'] = $request->boolean('actif', true);
+
+        $user = User::create($validated);
+        $user->load('role');
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Utilisateur créé avec succès',
+            'data' => $user,
+        ], 201);
+    }
+
+    /**
+     * API: Update a user
+     */
+    public function apiUpdate(Request $request, string $id)
+    {
+        $user = User::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $id . '|max:255',
+            'password' => 'nullable|string|min:6',
+            'role_id' => 'nullable|exists:roles,id',
+            'actif' => 'nullable|boolean',
+        ]);
+
+        if ($request->filled('password')) {
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
+
+        $validated['actif'] = $request->boolean('actif', true);
+
+        $user->update($validated);
+        $user->load('role');
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Utilisateur modifié avec succès',
+            'data' => $user,
+        ]);
+    }
+
+    /**
+     * API: Delete a user
+     */
+    public function apiDestroy(string $id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Utilisateur supprimé avec succès',
+        ]);
+    }
 }

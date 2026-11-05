@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\RendezVousController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -42,5 +43,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('clients', [ClientsController::class, 'apiStore']);
     Route::put('clients/{id}', [ClientsController::class, 'apiUpdate']);
     Route::delete('clients/{id}', [ClientsController::class, 'apiDestroy']);
+
+    // Utilisateurs
+    Route::get('utilisateurs', [UserController::class, 'apiIndex']);
+    Route::get('utilisateurs/roles', [UserController::class, 'apiRoles']);
+    Route::post('utilisateurs', [UserController::class, 'apiStore']);
+    Route::put('utilisateurs/{id}', [UserController::class, 'apiUpdate']);
+    Route::delete('utilisateurs/{id}', [UserController::class, 'apiDestroy']);
 
 });

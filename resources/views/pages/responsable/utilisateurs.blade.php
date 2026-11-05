@@ -127,7 +127,12 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Mot de passe</label>
-                    <input type="password" name="password" required class="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-gray-300" placeholder="********">
+                    <div class="relative">
+                        <input type="password" name="password" id="createPassword" required class="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-gray-300 pr-12" placeholder="********">
+                        <button type="button" onclick="togglePassword('createPassword', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Rôle</label>
@@ -156,7 +161,7 @@
                     <button type="button" onclick="closeModal('createModal')" class="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-200 font-medium">
                         Annuler
                     </button>
-                    <button type="submit" class="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 font-medium shadow-md hover:shadow-lg">
+                    <button type="submit" id="createSubmitBtn" class="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 font-medium shadow-md hover:shadow-lg">
                         Créer
                     </button>
                 </div>
@@ -212,7 +217,7 @@
                     <button type="button" onclick="closeModal('editModal')" class="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-200 font-medium">
                         Annuler
                     </button>
-                    <button type="submit" class="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 font-medium shadow-md hover:shadow-lg">
+                    <button type="submit" id="editSubmitBtn" class="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 font-medium shadow-md hover:shadow-lg">
                         Modifier
                     </button>
                 </div>
@@ -266,6 +271,49 @@
         function closeModal(modalId) {
             document.getElementById(modalId).classList.add('hidden');
         }
+
+        function togglePassword(inputId, button) {
+            const input = document.getElementById(inputId);
+            const icon = button.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Disable submit buttons on form submission
+        document.addEventListener('DOMContentLoaded', function() {
+            const createForm = document.querySelector('#createModal form');
+            const editForm = document.querySelector('#editModal form');
+
+            if (createForm) {
+                createForm.addEventListener('submit', function() {
+                    const submitBtn = document.getElementById('createSubmitBtn');
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                        submitBtn.textContent = 'Création en cours...';
+                    }
+                });
+            }
+
+            if (editForm) {
+                editForm.addEventListener('submit', function() {
+                    const submitBtn = document.getElementById('editSubmitBtn');
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                        submitBtn.textContent = 'Modification en cours...';
+                    }
+                });
+            }
+        });
 
         function openViewModal(id, name, email, role, actif) {
             document.getElementById('viewAvatar').textContent = name ? name.charAt(0).toUpperCase() : 'U';
